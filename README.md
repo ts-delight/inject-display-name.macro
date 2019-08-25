@@ -3,7 +3,7 @@
 Babel Macro to inject display name into dynamically constructed components
 
 ```js
-import classToComponent from "class-to-component";
+import classToComponent from "@ts-delight/class-to-component";
 import {style} from "typestyle";
 
 // Before:
@@ -62,7 +62,7 @@ Which will be transformed to:
 
 ```js
 import injectDN from "@ts-delight/inject-display-name.macro";
-import classToComponent from "class-to-component";
+import classToComponent from "@ts-delight/class-to-component";
 import {style} from "typestyle";
 
 const CustomContainer = injectDN(classToComponent(style({ display: 'block' })));
@@ -78,10 +78,10 @@ This utility is implemented as a [babel-macro](https://github.com/kentcdodds/bab
 
 Refer babel's [setup instructions](https://babeljs.io/setup) to learn how to setup your project to use [babel](https://babeljs.io) for compilation.
 
-1. Install `babel-plugin-macros` and `if-expr.macro`:
+1. Install `babel-plugin-macros` and `inject-display-name.macro`:
 
 ```js
-npm install --save-dev babel-plugin-macros inject-display-name.macro
+npm install --save-dev babel-plugin-macros @ts-delight/inject-display-name.macro
 ```
 
 2. Add babel-plugin-macros to .babelrc (if not already preset):
