@@ -1,6 +1,6 @@
 # About
 
-Babel Macro to inject display name into dynamically constructed components
+[Babel Macro](https://github.com/kentcdodds/babel-plugin-macros) to inject [display name](https://reactjs.org/docs/react-component.html#displayname) into dynamically constructed components
 
 ```js
 import classToComponent from "@ts-delight/class-to-component";
@@ -12,7 +12,7 @@ const Container = classToComponent(style({ display: 'block' }));
               //    |_______ Creates a react component
 
 // If we see in react-dev-tools, the name shown for this component will be 
-// ClassToComponent(div) which can be confusing if we have many class names
+// ClassToComponent(div) which can be confusing if we have many such generated components.
 ```
 
 We can fix this by either passing a displayName to the component API (if supported):
@@ -39,7 +39,7 @@ import injectDN from "@ts-delight/inject-display-name.macro";
 const Container = injectDN(classToComponent(style({ display: 'block' })));
 ```
 
-Which will auto-matically inject a statement (at build time) like:
+Which will automatically inject a statement (at build time) like:
 
 ```js
 Container.displayName = 'Container';
@@ -70,7 +70,7 @@ CustomContainer.displayName = 'CustomContainer';
 export default CustomContainer;
 ```
 
-Here the display name and the constant name is derived from the name of the file.
+Here both the display name and the constant name is derived from the name of the file.
 
 ## Installation
 
