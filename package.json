@@ -1,6 +1,6 @@
 {
     "name": "@ts-delight/inject-display-name.macro",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Auto inject display names into react components",
     "main": "inject-display-name.macro.js",
     "types": "inject-display-name.macro.d.ts",
