@@ -15,23 +15,29 @@ test("Transformations", () => {
 
     function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-    try {
-      C1.displayName = \\"C1\\";
-    } catch (e) {}
-
     const C0 = () => {
       return _react.default.createElement(\\"div\\");
     };
 
     try {
       C0.displayName = \\"C0\\";
-    } catch (e) {}
+    } catch (e) {
+      console.error(e);
+      console.error(\\"injectDN failed to assign displayName:\\", \\"C0\\");
+    }
 
     const C1 = () => {
       return _react.default.createElement(\\"div\\");
     };
 
     exports.C1 = C1;
+
+    try {
+      C1.displayName = \\"C1\\";
+    } catch (e) {
+      console.error(e);
+      console.error(\\"injectDN failed to assign displayName:\\", \\"C1\\");
+    }
 
     const Fn = () => {
       return _react.default.createElement(\\"div\\");
@@ -46,7 +52,10 @@ test("Transformations", () => {
 
     try {
       C3.displayName = \\"C3\\";
-    } catch (e) {}
+    } catch (e) {
+      console.error(e);
+      console.error(\\"injectDN failed to assign displayName:\\", \\"C3\\");
+    }
 
     var C4 = () => {
       return _react.default.createElement(\\"div\\");
@@ -54,7 +63,10 @@ test("Transformations", () => {
 
     try {
       C4.displayName = \\"C4\\";
-    } catch (e) {}
+    } catch (e) {
+      console.error(e);
+      console.error(\\"injectDN failed to assign displayName:\\", \\"C4\\");
+    }
 
     const _index = () => {
       return _react.default.createElement(\\"div\\");
@@ -62,7 +74,10 @@ test("Transformations", () => {
 
     try {
       _index.displayName = \\"_index\\";
-    } catch (e) {}
+    } catch (e) {
+      console.error(e);
+      console.error(\\"injectDN failed to assign displayName:\\", \\"_index\\");
+    }
 
     var _default = _index;
     exports.default = _default;"

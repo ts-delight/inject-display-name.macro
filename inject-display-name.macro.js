@@ -50,10 +50,17 @@ const InjectDisplayName = ({ references, state, babel }) => {
     );
   }
 
-  const stmtTmpl = (id) => template(`
+  const stmtTmpl = (id) =>
+    // The assignment can fail when the object is not extensible
+    //
+    // Fail gracefully in such situations
+    template(`
     try {
       %%id%%.displayName = %%displayName%%;
-    } catch (e) {}`)({
+    } catch (e) {
+      console.error(e);
+      console.error("injectDN failed to assign displayName:", %%displayName%%);
+    }`)({
     id,
     displayName: t.stringLiteral(id.name)
   });
@@ -71,31 +78,34 @@ const InjectDisplayName = ({ references, state, babel }) => {
     if (!parentPath) failWithUnsupportedUsage(nodePath.node);
     if (t.isVariableDeclarator(parentPath.node)) {
       // Handle macro usage in variable declaration:
-    
+
       const {id} = parentPath.node;
       parentPath = findParent(parentPath);
       if (!parentPath || !t.isVariableDeclaration(parentPath.node)) {
         failWith(3, nodePath.node, 'Expected to be used in variable declaration statement');
       }
       let bodyParentPath = findParent(parentPath);
+      let childPath = parentPath;
       if (t.isExportNamedDeclaration(bodyParentPath.node)) {
+        // Go up one more level
+        childPath = bodyParentPath;
         bodyParentPath = findParent(bodyParentPath);
       }
       if (!bodyParentPath || !bodyParentPath.node || !bodyParentPath.node.body) {
         failWith(4, nodePath.node, 'Failed to find a parent body to inject subsequent statement');
       }
-      const idx = bodyParentPath.node.body.indexOf(parentPath.node) + 1; 
+      const idx = bodyParentPath.node.body.indexOf(childPath.node) + 1;
       bodyParentPath.node.body.splice(idx, 0, stmtTmpl(id));
     } else if (t.isExportDefaultDeclaration(parentPath.node)) {
       // Handle macro usage in export default
-    
+
       const bodyParentPath = findParent(parentPath);
       if (!bodyParentPath || !bodyParentPath.node || !bodyParentPath.node.body) {
         failWith(4, nodePath.node, 'Failed to find a parent body to inject subsequent statement');
       }
 
       const idx = bodyParentPath.node.body.indexOf(parentPath.node);
-    
+
       // Derive id from filename (if available)
       const idBase = state.filename ? path.basename(state.filename, path.extname(state.filename)) : 'DefaultExport';
       const id = bodyParentPath.scope.generateUidIdentifier(idBase);
@@ -107,7 +117,7 @@ const InjectDisplayName = ({ references, state, babel }) => {
         declaration: parentPath.node.declaration
       }), stmtTmpl(id));
       parentPath.node.declaration = id;
-    
+
       // If we don't register the declaration then typescript-plugin will complain
       bodyParentPath.traverse({
         VariableDeclaration(path) {
