@@ -73,12 +73,12 @@ const InjectDisplayName = ({ references, state, babel }) => {
     if (parentPath.node.arguments.length !== 1) {
       failWith(2, parentPath.node, 'Expected to be invoked with a single argument');
     }
-    parentPath.replaceWith(parentPath.node.arguments[0]);
-    parentPath = findParent(parentPath);
+    const arg = parentPath.node.arguments[0];
+    parentPath.replaceWith(arg);
+    ({parentPath} = parentPath);
     if (!parentPath) failWithUnsupportedUsage(nodePath.node);
     if (t.isVariableDeclarator(parentPath.node)) {
       // Handle macro usage in variable declaration:
-
       const {id} = parentPath.node;
       parentPath = findParent(parentPath);
       if (!parentPath || !t.isVariableDeclaration(parentPath.node)) {
@@ -126,7 +126,9 @@ const InjectDisplayName = ({ references, state, babel }) => {
           }
         }
       });
-
+    } else if (t.isExpressionStatement(parentPath) && t.isIdentifier(arg)) {
+      // Standalone invocation with an identifier as argument
+      parentPath.replaceWith(stmtTmpl(arg))
     } else failWithUnsupportedUsage(nodePath.node);
   }
 };

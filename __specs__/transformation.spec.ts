@@ -80,6 +80,15 @@ test("Transformations", () => {
     }
 
     var _default = _index;
-    exports.default = _default;"
+    exports.default = _default;
+
+    const C5 = () => _react.default.createElement(\\"div\\");
+
+    try {
+      C5.displayName = \\"C5\\";
+    } catch (e) {
+      console.error(e);
+      console.error(\\"injectDN failed to assign displayName:\\", \\"C5\\");
+    }"
   `);
 });

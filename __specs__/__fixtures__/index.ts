@@ -26,3 +26,6 @@ var C4 = injectDN(() => {
 export default injectDN(() => {
   return React.createElement("div");
 });
+
+const C5 = () => React.createElement("div");
+injectDN(C5);
